@@ -1,23 +1,24 @@
 module Day2
   module Solution
-    class SignalHalt < StandardError; end
+    class SignalHalt < StandardError
+    end
 
     OP_CODES = {
-      1 => -> (a, b) { a + b },
-      2 => -> (a, b) { a * b },
-      99 => ->(a, b) { raise SignalHalt.new }
-    }
+      1 => ->(a, b) { a + b },
+      2 => ->(a, b) { a * b },
+      99 => ->(_, _) { raise SignalHalt }
+    }.freeze
 
     module_function
 
     def find_noun_verb(filename, target_output)
       original_intcodes = intcodes_from_file(filename)
       noun, verb = (0..99)
-        .to_a
-        .permutation(2) do |noun, verb|
-          intcodes = spawn_intcodes_with_noun_and_verb(original_intcodes, noun, verb)
-          result = compute_intcodes(intcodes)
-          break [noun, verb] if result[0] == target_output
+                   .to_a
+                   .permutation(2) do |noun, verb|
+        intcodes = spawn_intcodes_with_noun_and_verb(original_intcodes, noun, verb)
+        result = compute_intcodes(intcodes)
+        break [noun, verb] if result[0] == target_output
       end
       puts "For output #{target_output}, noun is #{noun}, verb is #{verb}"
       puts "100 * noun + verb = #{100 * noun + verb}"
@@ -38,7 +39,7 @@ module Day2
           intcodes[slice.last] = op_result
         end
       rescue SignalHalt
-        "Halted!"
+        'Halted!'
       end
       intcodes
     end
