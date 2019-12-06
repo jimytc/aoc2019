@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'rspec'
-
-group :development do
-  gem 'pry'
-  gem 'pry-byebug'
-end
+gem 'pry'
+gem 'pry-byebug'
+gem 'awesome_print'
